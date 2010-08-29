@@ -1,0 +1,16 @@
+
+
+plugin.tx_x4euniprojects_pi1 {
+	CMD =
+	pidList =
+	recursive =
+	alphaSortField = name
+}
+plugin.tx_x4euniprojects_pi1.listView {
+	results_at_a_time =
+	maxPages =
+}
+
+plugin.tx_x4euniprojects_pi1.listByCategory {
+	header = <p>W&auml;hlen Sie den Anfangsbuchstaben des Nachnahmens der Projektleiter</p>
+}

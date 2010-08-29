@@ -1,0 +1,37 @@
+plugin.tx_x4euniprojectsgeneral_pi1 {
+	templateList = typo3conf/ext/x4euniprojectsgeneral/pi1/templates/list.html
+	templateDetail = typo3conf/ext/x4euniprojectsgeneral/pi1/templates/detail.html
+	personSingleUid = {$persDB.detailPageUid}
+	pages = {$projectDB.pidList}
+	orderFieldList=title
+	orderByList=projecttitle
+	dateFormat = %Y
+	listView{
+		results_at_a_time = 20
+		categoryViewTemplate = typo3conf/ext/x4euniprojectsgeneral/pi1/templates/listByCategory.html
+		categoryPidList = {$projectDB.pidList}
+		
+		maxPages = 7
+		showResultCount = 1
+		showPBrowserText = 0
+		dontLinkActivePage = 1
+		tableParams = cellpadding="2" align="center"
+
+		showFirstLast = 1
+		pagefloat = center
+		showRange = 0
+		disabledLinkWrap = <span style="color:#bbb;">|</span>
+		inactiveLinkWrap = |
+		activeLinkWrap = <strong>|</strong>
+		LinksWrap =|
+		showResultsWrap = |<br />
+		showResultsNumbersWrap = |
+		browseBoxWrap =
+		browseLinksWrap = |
+		pagefloat = center
+	}
+	
+	contact {
+		templateFile = typo3conf/ext/x4euniprojectsgeneral/pi1/templates/contact.html
+	}
+}
