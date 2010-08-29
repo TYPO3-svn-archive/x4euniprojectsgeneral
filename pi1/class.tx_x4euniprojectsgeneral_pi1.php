@@ -43,10 +43,15 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 	var $tableName = 'tx_x4euniprojectsgeneral_list';
 	var $categoryTable = 'tx_x4euniprojectsgeneral_category';
 
-
+	/**
+	 * Sets inital variables form typoscript and flexform
+	 *
+	 * @param $content				string	Deprecated, not used
+	 * @param $conf					array	Typoscript configuration array
+	 * @return void
+	 *
+	 */
 	function init($content,$conf) {
-
-		//nWBK
 		parent::init($content,$conf);
 		$this->manualFieldOrder_list = t3lib_div::trimExplode(',',$this->getTSFFvar('fieldsList'),1);
 		$this->projectCategory = $this->conf['projectCategory'];
@@ -60,7 +65,6 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 		$this->pi_loadLL();		// Loading the LOCAL_LANG values
 		$this->pi_initPIflexform();
 
-		//nWBK
 		if (isset($this->conf['orderByList']) && ($this->conf['orderByList'] != '')) {
 			$this->internal['orderByList'] = $this->conf['orderByList'];
 		} else {
@@ -88,10 +92,14 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 	}
 
 	/**
-	 * [Put your description here]
+	 * Main function, calls init and then decides which content to display
+	 *
+	 * @param string 	$content
+	 * @param string 	$conf		Typoscript
+	 *
+	 * @return string	HTML-String, extension output
 	 */
 	function main($content,$conf)	{
-		//$GLOBALS['TYPO3_DB']->debugOutput = true;
 		$this->init($content,$conf);
 
 		if ($this->pi_getFFvalue($this->cObj->data['pi_flexform'],'modeSelection')=='contact') {
@@ -105,19 +113,17 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 			}
 			$out = $this->getView();
 		}
-
-		//return $this->pi_wrapInBaseClass($this->listView());
 		return $this->pi_wrapInBaseClass($out);
-
 	}
 
 
 	/**
-	 * [Put your description here]
+	 * Function to create a default table-like list view
+	 *
+	 * @param	String 	$addWhere	Additional where condition to select the records
+	 * @return	String				HTML-View of list
 	 */
 	function listView($addWhere='')	{
-
-
 		global $TCA;
 		$this->internal['currentTable'] = $this->table;
 
@@ -172,7 +178,6 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 				$WHERE .= $addWhere;
 
 	    		if (!isset($this->piVars['pointer']))	$this->piVars['pointer']=0;
-	    		//if (!isset($this->piVars['mode']))	$this->piVars['mode']=1;
 
 	    			// Initializing the query parameters:
 				if ($this->piVars['sort'] == ""){
@@ -180,9 +185,6 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 				}
 
 	    		list($this->internal['orderBy'],$this->internal['descFlag']) = explode(':',$this->piVars['sort']);
-
-				//nWBK
-				//if (!isset($this->piVars['sort']))	$this->internal['orderBy']=array_shift(explode(',',$this->internal['orderByList']));
 
 				$this->internal['results_at_a_time']=t3lib_div::intInRange($lConf['results_at_a_time'],0,1000,5);		// Number of results to show in a listing.
 	    		$this->internal['maxPages']=t3lib_div::intInRange($lConf['maxPages'],0,1000,2);		// The maximum number of "pages" in the browse-box: "Page 1", "Page 2", etc.
@@ -200,8 +202,6 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 
 	    		// Make Where Statement
 	    		$WHERE .= 'AND (1 '.$this->cObj->searchWhere($this->piVars['sword'],$this->internal['searchFieldList'],$this->table).chr(10);
-	    		//$WHERE .= ' OR projectmanagement IN ('.$GLOBALS['TYPO3_DB']->SELECTquery('uid',$this->personTable,'1 '.$this->cObj->enableFields($this->personTable).$this->cObj->searchWhere($this->piVars['sword'],$this->lastNameField.','.$this->firstNameField,$this->personTable)).')';
-	  			//$WHERE .= ' OR personsinvolved IN ('.$GLOBALS['TYPO3_DB']->SELECTquery('uid',$this->personTable,'1 '.$this->cObj->enableFields($this->personTable).$this->cObj->searchWhere($this->piVars['sword'],$this->lastNameField.','.$this->firstNameField,$this->personTable)).'))';
 				$WHERE .= $pm_or . $pi_or;
 				$WHERE .= ')';
 
@@ -211,44 +211,26 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 
 	    		// get number of results
 				$res = $this->pi_exec_query($this->table,1,$WHERE);
-	    		//$res = $this->getListResultSet($this->table);
 
 	    		list($this->internal['res_count']) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-	    		//$WHERE .= $this->cObj->enableFields('tx_x4eprojects_list');
-
 	    		// Make listing query, pass query to SQL database:
 
-				//$res =$this->pi_exec_query($this->table,0,$WHERE,'','',$this->internal['orderByList']);
-				//$res = $this->pi_exec_query($this->table,0,$WHERE);
 				t3lib_div::loadTCA($this->table);
 				$res = $this->getListResultSet($this->table, $WHERE, 'name');
-
-	    		//$this->internal['currentTable'] = $this->table;
-
 
 	    		$this->piVars['sword'] = $backupSearchWord;
 
 	    		// Put the whole list together:
 	    		$fullTable='';	// Clear var;
-	    		#	$fullTable.=t3lib_div::view_array($this->piVars);	// DEBUG: Output the content of $this->piVars for debug purposes. REMEMBER to comment out the IP-lock in the debug() function in t3lib/config_default.php if nothing happens when you un-comment this line!
 
 	    		// Adds the search box:
 	    		$fullTable.=$this->pi_list_searchBox();
 
-
 	    		// Adds the result browser:
-				//$fullTable .= '<p>'.$this->pi_list_browseresults(1,'',$this->conf['listView.']).'</p>';
 				$mArr['###pageBrowser###'] = $this->pi_list_browseresults(1,'',$this->conf['listView.']);
 	    		// Adds the listsview
 	    		$fullTable .= $this->pi_list_makelist($res);
-				//nWBK
-				/*
-				$mArr['title'] = $this->pi_getLL('listTitle');
-				$fullTable = $this->cObj->substituteMarkerArray($fullTable,$mArr,'###|###');
-	    		// Returns the content from the plugin.
-	    		return $fullTable;
-				 */
 
 				// Returns the content from the plugin.
 	    		return $this->cObj->substituteMarkerArray($fullTable,$mArr);
@@ -258,7 +240,9 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 
 
 	/**
-	 * [Put your description here]
+	 *
+	 * @param object $res	SQL-result object
+	 * @return string HTML formatted text
 	 */
 	function makelist($res)	{
 		$items=Array();
@@ -275,13 +259,14 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 
 
 	/**
-	 * [Put your description here]
+	 * Displays single view of a record. It's possible to give a record,
+	 * otherwise, the function gets the one in the piVars['showUid']
+	 *
+	 * @return	string				HTML-View of record
 	 */
 	function singleView()	{
 		// get template File for single view
 		$this->templateSingle = $this->cObj->fileResource($this->conf['templateDetail']);
-		//nWBK:
-		//return parent::singleView();
 
 		// This sets the title of the page for use in indexed search results:
 		if ($this->internal['currentRow']['title'])	$GLOBALS['TSFE']->indexedDocTitle=$this->internal['currentRow']['title'];
@@ -296,16 +281,6 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 		/**
 		 * Changed by alessandro@4eyes.ch on 22.07.2010 to implement method getBoxedFieldContent instead of getFieldContent...
 		 */
-		/* Begin change
-		$values = array();
-		$field = array();
-		// get fields to display
-		foreach($this->internal['currentRow'] as $k => $v){
-			$values['###'.$k.'###'] = $this->getFieldContent($k);
-		}
-		$values['###back###'] = '<a href="javascript:history.back()">'.$this->pi_getLL('pi_list_back_to_list').'</a>';
-		return $this->cObj->substituteMarkerArray($this->templateSingle,$values);
-		*/
 		$sub = array();
 		$mArr = array();
 		// get fields to display
@@ -314,7 +289,6 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 		}
 		$mArr['###back###'] = '<a href="javascript:history.back()">'.$this->pi_getLL('pi_list_back_to_list').'</a>';
 		return $this->cObj->substituteMarkerArrayCached($this->templateSingle,$mArr,$sub);
-		//... end change
 	}
 
 	/**
@@ -324,9 +298,7 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 	 * @return	string		Content, ready for HTML output.
 	 */
 	function getBoxedFieldContent($fN){
-
 		$tmpl = $this->cObj->getSubpart($this->templateSingle,'###'.$fN.'Box###');
-
 		if (($tmpl != '') && ($this->internal['currentRow'][$fN]!='') && $this->checkDisplayField($fN)) {
 			$mArr[$fN] = $this->getFieldContent($fN);
 			$mArr[$fN.'Label'] = $this->pi_getLL($fN.'Label');
@@ -341,7 +313,10 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 	}
 
 	/**
-	 * [Put your description here]
+	 * Retrieves field content, processed, prepared for HTML output.
+	 *
+	 * @param	string		Fieldname
+	 * @return	string		Content, ready for HTML output.
 	 */
 	function getFieldContent($key)	{
 
@@ -356,19 +331,11 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 					/**
 					 * Changed by alessandro@4eyes.ch on 22.07.2010 to avoid to display empty fields..
 					 */
-					/* Begin change...
-					if($this->internal['currentRow'][$key] == '0'){
-						$values .= '&nbsp;';
-					} else {
-						$values .= strftime('%d. %b %Y',$this->internal['currentRow'][$key]);
-					}
-					*/
 					if(intval($this->internal['currentRow'][$key]) != 0){
 						$values .= strftime('%d. %b %Y',$this->internal['currentRow'][$key]);
 					} else {
 						return '';
 					}
-					//...end change
 				break;
 
 				case 'uid':
@@ -391,15 +358,6 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 				case 'personsinvolved':
 					$personArray = array();
 					if($this->internal['currentRow'][$key] != ''){
-						//$users = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid,'.$this->titleField.','.$this->firstNameField.','.$this->lastNameField.','.$this->titleAfterField,$this->personTable,'uid IN ('.$this->internal['currentRow'][$key].')'.$this->cObj->enableFields($this->personTable));
-						/*
-						//nWBK:
-						if($this->detailview){
-							$users = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid,'.$this->titleField.','.$this->firstNameField.','.$this->lastNameField.','.$this->titleAfterField,$this->personTable,'uid IN ('.$this->internal['currentRow'][$key].')'.$this->cObj->enableFields($this->personTable));
-						} else {
-							$users = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid,'.$this->firstNameField.','.$this->lastNameField,$this->personTable,'uid IN ('.$this->internal['currentRow'][$key].')'.$this->cObj->enableFields($this->personTable), '','');  // changed for bug(id=0001714)
-						}
-						*/
 						$users = array();
 
 						foreach(explode(",",$this->internal['currentRow'][$key]) as $userId){
@@ -522,48 +480,26 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 	}
 
 	/**
-	 * [Put your description here]
-	 */
-	function getFieldHeader($fN)	{
-		switch($fN) {
-
-			default:
-				return $this->pi_getLL('listFieldHeader_'.$fN,'['.$fN.']');
-			break;
-		}
-	}
-
-	/**
-	 * [Put your description here]
+	 * Field header name, but wrapped in a link for sorting by column.
+	 *
+	 * @param	string		Fieldname
+	 * @return	string		Content, ready for HTML output.
 	 */
 	function getFieldHeader_sortLink($fN)	{
-		/*
-		$params['sort'] = $fN.':'.($this->internal['descFlag']?0:1);
-		$params['showUid'] = $this->internal['currentRow'][$key];
-		$params['tx_'.$this->persExtKey.'_pi1[showUid]'] =$_GET['tx_'.$this->persExtKey.'_pi1']['showUid'];
-		return $this->pi_linkTP_keepPIvars($this->getFieldHeader($fN),$params,1);
-		*/
-
-		//nWBK:
 		$params[$this->prefixId.'[sort]'] = $fN.':'.($this->internal['descFlag']?0:1);
 		$params[$this->prefixId.'[showUid]'] = $this->internal['currentRow'][$key];
 		$params['tx_'.$this->persExtKey.'_pi1[showUid]'] =$_GET['tx_'.$this->persExtKey.'_pi1']['showUid'];
 		switch($fN){
-			/*
-			case "projectmanagement":
-				return $this->getFieldHeader($fN);
-				break;
-			case "personsinvolved":
-				return $this->getFieldHeader($fN);
-				break;
-			*/
 			default:
 				return $this->pi_linkTP($this->getFieldHeader($fN),$params,1);
 		}
 	}
 
 	/**
-	 * [Put your description here]
+	 * Returns a list row. Get data from $this->internal['currentRow'];
+	 *
+	 * @param integer $c	Row number
+	 * @return string	html, one record as a row
 	 */
 	function pi_list_row($c) {
 		$this->cols = 0;
@@ -575,7 +511,11 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 		return $this->cObj->substituteSubpart($this->rowT[$c%2],'###cell###',$values);
 	}
 
-
+	/**
+	 * Generates list of projects
+	 * @param object $res	SQL result object
+	 * @return array
+	 */
 	function pi_list_makelistPersonel($res)	{
 		// get all templates
 		if ($this->manualFieldOrder_list == ''){
@@ -617,15 +557,11 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 
 
 	function makePersonelList($pUid){
-		//t3lib_div::print_array(get_object_vars($GLOBALS['TSFE']));
 		$this->internal['maxPages'] = 999;
 		$listCurrent = array();
 		$list = array();
 
-		//
 		// select current projects
-		//
-		//$WHERE = ' AND ('.$pUid.' IN ('.$this->table.'.projectmanagement) OR FIND_IN_SET('.$pUid.','.$this->table.'.personsinvolved))';
 		$WHERE = ' AND ( FIND_IN_SET('.$pUid.','.$this->table.'.projectmanagement) OR FIND_IN_SET('.$pUid.','.$this->table.'.personsinvolved))';
 
 		$WHERE .= ' AND '.$this->table.'.finished = 0 ';
@@ -643,9 +579,7 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 			$list = '';
 		}
 
-		//
 		// select terminated projects
-		//
 		$WHERE = ' AND ('.$pUid.' IN ('.$this->table.'.projectmanagement) OR FIND_IN_SET('.$pUid.','.$this->table.'.personsinvolved))';
 		$WHERE .= ' AND '.$this->table.'.finished = 1 ';
 		$res = $this->pi_exec_query($this->table,0,$WHERE);
@@ -733,13 +667,15 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 		}
 	}
 
+	/**
+	 * Renders a single cagegory
+	 *
+	 * @global array $TCA
+	 * @param array $category Category recrod, by reference
+	 * @return string
+	 */
 	function renderCategory(&$category) {
 		global $TCA;
-		/*$res = $this->pi_exec_query($this->table,1,$WHERE);
-    		//$res = $this->getListResultSet($this->table);
-
-    		list($this->internal['res_count']) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-		*/
 
 		if(isset($this->conf['catCol'])){
 			$s['###list###'] = $this->listView(' AND (FIND_IN_SET('.intval($category['uid']).','.$this->conf['catCol'].') > 0)');
@@ -777,6 +713,11 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 
 	/**
 	 * Creates links which work like a "page selector", but using letters
+	 *
+	 * @todo: check if same page browser like x4epersdb => merge into x4pibase
+	 *
+	 * @param integer $step	Nummber of chars per step
+	 * @return string HTML formatted page browser
 	 */
 	function alphabeticPageBrowser($step=4) {
 		$t = $this->cObj->getSubpart($this->template,'###alphabeticPageBrowser###');
@@ -867,10 +808,6 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 
 		$cats = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*',$this->categoryTable,$this->categoryTable.'.pid IN ('.$catsPID.')'.$this->cObj->enableFields($this->categoryTable).$addWhere,'',$order,$limit);
 
-
-		//$catNum = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('count(*)',$this->categoryTable,$this->categoryTable.'.pid IN ('.$catsPID.')'.$this->cObj->enableFields($this->categoryTable).$addWhere,'',$order,$limit);
-		//t3lib_div($catNum);
-
 		if ($this->template == '') {
 			$this->template = $this->cObj->fileResource($this->conf['listView.']['categoryViewTemplate']);
 		}
@@ -895,16 +832,17 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 
 		}
 
-		// if(intval($this->conf['projectCategory']) != intval($c['uid']) && intval($this->conf['hideProjectCategory']) != 1){
-
-
-
 		unset($m,$s,$tmpl,$c);
 		$GLOBALS['TYPO3_DB']->sql_free_result($cats);
 
 		return $this->cObj->substituteMarkerArrayCached($this->template,array(),$sub);
 	}
 
+	/**
+	 * Creates an instance of the pi3 plugin to render the projects contacts
+	 *
+	 * @return string
+	 */
 	function getContactInfo() {
 		$persPi3 = t3lib_div::makeInstance('tx_'.$this->persExtKey.'_pi3');
 		$project = $this->pi_getRecord($this->table,$this->piVars['showUid']);

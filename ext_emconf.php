@@ -11,8 +11,8 @@
 ########################################################################
 
 $EM_CONF[$_EXTKEY] = array(
-	'title' => 'x4euniprojectsgeneral',
-	'description' => 'Project administrator',
+	'title' => '4eyes - Project database',
+	'description' => 'Project database to present projects',
 	'category' => 'plugin',
 	'shy' => 0,
 	'version' => '0.0.2',
@@ -35,7 +35,8 @@ $EM_CONF[$_EXTKEY] = array(
 	'constraints' => array(
 		'depends' => array(
 			'cms' => '',
-                        'x4epibase' => ''
+			'x4epibase' => '',
+			'x4persdb' => ''
 		),
 		'conflicts' => array(
 		),
