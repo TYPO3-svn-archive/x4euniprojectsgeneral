@@ -1,8 +1,10 @@
 (add new changes on top of this file)
 2010-08-29 Markus Stauffiger <markus-at-4eyes.ch>
+    * Merged x4euniprojects and x4euniprojectsgeneral
+
+2010-08-29 Markus Stauffiger <markus-at-4eyes.ch>
     * Initial forge upload
     * Deleted some unnecessary files
 
 05-09-29 Andi Keller  <andi-at-4eyes.ch>
-
 	* Initial release
