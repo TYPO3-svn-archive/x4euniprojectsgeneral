@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="listFieldHeader_projecttitle">Project title</label>
+			<label index="listFieldHeader_projectmanagement">Project management</label>
+			<label index="listFieldHeader_externalprojectmanagement">External project management</label>
+			<label index="listFieldHeader_personsinvolved">Persons involved</label>
+			<label index="listFieldHeader_externalpersonsinvolved">External persons involved</label>
+			<label index="listFieldHeader_start">Start</label>
+			<label index="listFieldHeader_end">End</label>
+			<label index="listFieldHeader_financing">Financing</label>
+			<label index="listFieldHeader_volume">Volume</label>
+			<label index="listFieldHeader_link1">Projectpage</label>
+			<label index="listFieldHeader_description">Description</label>
+			<label index="listFieldHeader_picture">Picture</label>
+			<label index="listFieldHeader_uid">details</label>
+			<label index="listFieldHeader_finished">finished</label>
+			<label index="list_mode_1">Mode 1</label>
+			<label index="list_mode_2">Mode 2</label>
+			<label index="list_mode_3">Mode 3</label>
+			<label index="back">Back</label>
+			<label index="pi_list_browseresults_prev">&amp;lsaquo; Previous</label>
+			<label index="pi_list_browseresults_page">Page</label>
+			<label index="pi_list_browseresults_next">Next &amp;rsaquo;</label>
+			<label index="pi_list_browseresults_displays">Displaying results ###FROM### to ###TO### out of ###OUT_OF###</label>
+			<label index="pi_list_searchBox_search">Search</label>
+			<label index="pi_list_browseresults_first">&amp;laquo; First</label>
+			<label index="pi_list_browseresults_last">Last &amp;raquo;</label>
+			<label index="pi_list_searchBox_search">Search</label>
+			<label index="pi_list_searchBox_more">more..</label>
+			<label index="pi_list_back_to_list">&amp;lsaquo; back to list</label>
+			<label index="listTitle">Projects</label>
+			<label index="link1">more information...</label>
+			<label index="title_current">Current projects</label>
+			<label index="title_terminated">Terminated projects</label>
+			<label index="projects_of">Projects of </label>
+			<label index="periodLabel">Period</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="listFieldHeader_projecttitle">Projekt</label>
+			<label index="listFieldHeader_projectmanagement">Projektleitung</label>
+			<label index="listFieldHeader_externalprojectmanagement">Projektleitung extern</label>
+			<label index="listFieldHeader_personsinvolved">Mitarbeiter</label>
+			<label index="listFieldHeader_externalpersonsinvolved">Mitarbeiter extern</label>
+			<label index="listFieldHeader_start">Beginn</label>
+			<label index="listFieldHeader_end">Abschluss</label>
+			<label index="listFieldHeader_financing">Finanzierung</label>
+			<label index="listFieldHeader_volume">Volumen</label>
+			<label index="listFieldHeader_link1">Projektseite</label>
+			<label index="listFieldHeader_description">Beschreibung</label>
+			<label index="listFieldHeader_picture">Bild</label>
+			<label index="listFieldHeader_uid">Details</label>
+			<label index="listFieldHeader_finished">abgeschlossen</label>
+			<label index="list_mode_1">Mode 1</label>
+			<label index="list_mode_2">Mode 2</label>
+			<label index="list_mode_3">Mode 3</label>
+			<label index="back">Zurück</label>
+			<label index="pi_list_browseresults_prev">&amp;lsaquo; Zurück</label>
+			<label index="pi_list_browseresults_page"></label>
+			<label index="pi_list_browseresults_next">Nächste &amp;rsaquo;</label>
+			<label index="pi_list_browseresults_displays">Zeige Resultate ###FROM### bis ###TO### von ###OUT_OF###</label>
+			<label index="pi_list_searchBox_search">Suche</label>
+			<label index="pi_list_browseresults_first">&amp;laquo; Anfang</label>
+			<label index="pi_list_browseresults_last">Ende &amp;raquo;</label>
+			<label index="pi_list_searchBox_search">Suchen</label>
+			<label index="pi_list_searchBox_more">mehr..</label>
+			<label index="pi_list_back_to_list">&amp;lsaquo; zurück zur Liste</label>
+			<label index="listTitle">Forschungsprojekte</label>
+			<label index="link1">Homepage des Projektes</label>
+			<label index="title_current">Laufende Projekte</label>
+			<label index="title_terminated">Beendete Projekte</label>
+			<label index="projects_of">Forschungsprojekte - </label>
+			<label index="periodLabel">Zeitraum</label>
+		</languageKey>
+	</data>
+</T3locallang>

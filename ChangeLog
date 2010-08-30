@@ -1,3 +1,7 @@
+2010-08-31 Markus Stauffiger <markus-at-4eyes.ch>
+	* changed pi1/locallang to xml structure
+	* localized detail.html template
+
 2010-08-30 Markus Stauffiger <markus-at-4eyes.ch>
 	* Updated manual
 	* Updated ext_typoscript_setup.txt

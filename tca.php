@@ -59,11 +59,10 @@ $TCA["tx_x4euniprojectsgeneral_list"] = Array (
 			"config" => Array (
 				"type" => "select",	
 				"foreign_table" => "tx_x4epersdb_person",	
-				"foreign_table_where" => "AND tx_x4epersdb_person.pid=###PAGE_TSCONFIG_ID### ORDER BY tx_x4epersdb_person.lastname",
+				"foreign_table_where" => "AND tx_x4epersdb_person.pid=###PAGE_TSCONFIG_ID### AND sys_language_uid = 0 ORDER BY tx_x4epersdb_person.lastname",
 				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
-				//"itemsProcFunc" => "tx_x4euniprojectsgeneral_tx_x4euniprojectsgeneral_tca_proc->main",
 			)
 		),
 		"projectmanagement" => Array (		
@@ -72,11 +71,10 @@ $TCA["tx_x4euniprojectsgeneral_list"] = Array (
 			"config" => Array (
 				"type" => "select",	
 				"foreign_table" => "tx_x4epersdb_person",	
-				"foreign_table_where" => "AND tx_x4epersdb_person.pid=###PAGE_TSCONFIG_ID### ORDER BY tx_x4epersdb_person.lastname",
+				"foreign_table_where" => "AND tx_x4epersdb_person.pid=###PAGE_TSCONFIG_ID### AND sys_language_uid = 0  ORDER BY tx_x4epersdb_person.lastname",
 				"size" => 8,	
 				"minitems" => 0,
 				"maxitems" => 100,
-				//"itemsProcFunc" => "tx_x4euniprojectsgeneral_tx_x4euniprojectsgeneral_tca_proc->main",
 			)
 		),
 		"externalprojectmanagement" => Array (		
@@ -94,11 +92,10 @@ $TCA["tx_x4euniprojectsgeneral_list"] = Array (
 			"config" => Array (
 				"type" => "select",	
 				"foreign_table" => "tx_x4epersdb_person",	
-				"foreign_table_where" => "AND tx_x4epersdb_person.pid=###PAGE_TSCONFIG_ID### ORDER BY tx_x4epersdb_person.lastname",
+				"foreign_table_where" => "AND tx_x4epersdb_person.pid=###PAGE_TSCONFIG_ID### AND sys_language_uid = 0  ORDER BY tx_x4epersdb_person.lastname",
 				"size" => 8,	
 				"minitems" => 0,
 				"maxitems" => 100,
-				//"itemsProcFunc" => "tx_x4euniprojectsgeneral_tx_x4euniprojectsgeneral_tca_proc->main",
 			)
 		),
 		"externalpersonsinvolved" => Array (		

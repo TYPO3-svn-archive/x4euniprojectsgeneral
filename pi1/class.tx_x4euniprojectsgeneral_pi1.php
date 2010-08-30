@@ -323,6 +323,7 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 		 */
 		$sub = array();
 		$mArr = array();
+		$this->addLanguageLabels($mArr);
 		// get fields to display
 		foreach($this->internal['currentRow'] as $k => $v){
 			$sub['###'.$k.'Box###'] = $this->getBoxedFieldContent($k);
@@ -342,6 +343,9 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 		if (($tmpl != '') && ($this->internal['currentRow'][$fN]!='') && $this->checkDisplayField($fN)) {
 			$mArr[$fN] = $this->getFieldContent($fN);
 			$mArr[$fN.'Label'] = $this->pi_getLL($fN.'Label');
+			if ($mArr[$fN.'Label'] == '') {
+				$mArr[$fN.'Label'] = $this->pi_getLL('listFieldHeader_'.$fN);
+			}
 			if($mArr[$fN]!=''){
 				return $this->cObj->substituteMarkerArray($tmpl,$mArr,'###|###');
 			}else{

@@ -36,7 +36,7 @@ $EM_CONF[$_EXTKEY] = array(
 		'depends' => array(
 			'cms' => '',
 			'x4epibase' => '',
-			'x4persdb' => ''
+			'x4epersdb' => ''
 		),
 		'conflicts' => array(
 		),
