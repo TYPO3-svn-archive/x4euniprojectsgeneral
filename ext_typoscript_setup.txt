@@ -13,12 +13,24 @@ plugin.tx_x4euniprojectsgeneral_pi1 {
 	orderByList=projecttitle
 	# date format
 	dateFormat = %Y
+
+	# first char to use for alphabetic browser
+	browseFirstAlpha =
+	# last char to use for alphabetic browser
+	browseLastAlpha =
+
+	# field to use the alphabetic page browser on
+	alphaSortField = 
+
 	listView{
 		results_at_a_time = 20
 		# template for category view
 		categoryViewTemplate = typo3conf/ext/x4euniprojectsgeneral/pi1/templates/listByCategory.html
 		# sysfolder uid containing the categories
 		categoryPidList = {$projectDB.pidList}
+
+		# link field for the list view
+		detailLinkFields = projecttitle
 
 		# page browser settings, according to tslib_pibase
 		maxPages = 7
@@ -41,12 +53,21 @@ plugin.tx_x4euniprojectsgeneral_pi1 {
 		pagefloat = center
 	}
 
+	# setup for list by category
 	listByCategory {
 		header = <p>W&auml;hlen Sie den Anfangsbuchstaben des Nachnahmens der Projektleiter</p>
 	}
-	
+
+	# column containing the category
+	catCol = category
+
+	# contact information
 	contact {
 		# template to use for the contact display
 		templateFile = typo3conf/ext/x4euniprojectsgeneral/pi1/templates/contact.html
+	}
+
+	# configuration for the image output
+	images {
 	}
 }

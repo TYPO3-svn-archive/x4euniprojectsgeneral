@@ -35,61 +35,63 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 	var $pi_checkCHash = TRUE;
 
 	/**
-	* Name of the person extension
-	* @var string
-	*/
+	 * Name of the person extension
+	 * @var string
+	 */
 	var $persExtKey = 'x4epersdb';
 	
 	/**
-	* Name of the table containing persons
-	* @var string
-	*/
+	 * Name of the table containing persons
+	 * @var string
+	 */
 	var $personTable = 'tx_x4epersdb_person';
 	
 	/**
-	* Name of firstname field in person extension
-	* @var string
-	*/
+	 * Name of firstname field in person extension
+	 * @var string
+	 */
 	var $firstNameField = 'firstname';
 	
 	/**
-	* Name of lastname field in person extension
-	* @var string
-	*/
+	 * Name of lastname field in person extension
+	 * @var string
+	 */
 	var $lastNameField = 'lastname';
 	
 	/**
-	* Name of title field in person extension
-	* @var string
-	*/
+	 * Name of title field in person extension
+	 * @var string
+	 */
 	var $titleField = 'title';
 	
 	/**
-	* Name of title_after field in person extension
-	* @var string
-	*/
+	 * Name of title_after field in person extension
+	 * @var string
+	 */
 	var $titleAfterField = 'title_after';
 	
 	/**
-	* Name of the table containing projects
-	* @var string
-	*/
+	 * Name of the table containing projects
+	 *
+	 * @todo: why are there two variables? find out and remove the unncessary
+	 *
+	 * @var string
+	 */
 	var $table = 'tx_x4euniprojectsgeneral_list';
 	var $tableName = 'tx_x4euniprojectsgeneral_list';
 	
 	/**
-	* Name of the table containing categories
-	* @var string
-	*/
+	 * Name of the table containing categories
+	 * @var string
+	 */
 	var $categoryTable = 'tx_x4euniprojectsgeneral_category';
 
 	/**
 	 * Sets inital variables form typoscript and flexform
 	 *
-	 * @param $content				string	Deprecated, not used
-	 * @param $conf					array	Typoscript configuration array
+	 * @param $content	string	Deprecated, not used
+	 * @param $conf		array	Typoscript configuration array
 	 * @return void
-	 *
 	 */
 	function init($content,$conf) {
 		parent::init($content,$conf);
@@ -744,7 +746,7 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 			$user = $this->pi_getRecord($this->tableNameUsers,intval($user));
 		}
 		// @todo: hardcoded table fields. Use defined variables instead
-		return $user['title']." ".$user['tx_listfeuseruni_firstname']." ".$user['name']." ".$user['tx_listfeuseruni_title_after'];
+		return $user['title']." ".$user['firstname']." ".$user['lastname']." ".$user['title_after'];
 	}
 
 	/**

@@ -1,3 +1,9 @@
+2010-08-30 Markus Stauffiger <markus-at-4eyes.ch>
+	* Updated manual
+	* Updated ext_typoscript_setup.txt
+	* Modified getUserName
+	* Cleaned up templates
+
 2010-08-30 Michel Georgy <michel-at-4eyes.ch>
 	* Reviewed code
 	* fixed possible sql injections
