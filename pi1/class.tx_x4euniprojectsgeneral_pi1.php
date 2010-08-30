@@ -145,9 +145,7 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 
 		$lConf = $this->conf['listView.'];	// Local settings for the listView function
 
-		//
 		// decide whether single view or list view has to be displayed
-		//
 		if($this->piVars['showUid'] != ''){
 			$this->detailview = 1;
 			return $this->singleView($content,$conf);
@@ -319,7 +317,6 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 	 * @return	string		Content, ready for HTML output.
 	 */
 	function getFieldContent($key)	{
-
 		$this->cols++;
 		switch($key) {
 				case 'internallink':
@@ -328,9 +325,7 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 
 				case 'start':
 				case 'end':
-					/**
-					 * Changed by alessandro@4eyes.ch on 22.07.2010 to avoid to display empty fields..
-					 */
+					// Changed by alessandro@4eyes.ch on 22.07.2010 to avoid to display empty fields..
 					if(intval($this->internal['currentRow'][$key]) != 0){
 						$values .= strftime('%d. %b %Y',$this->internal['currentRow'][$key]);
 					} else {

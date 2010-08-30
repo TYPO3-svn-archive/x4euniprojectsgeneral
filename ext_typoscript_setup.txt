@@ -1,16 +1,26 @@
 plugin.tx_x4euniprojectsgeneral_pi1 {
+	# template file for the list view
 	templateList = typo3conf/ext/x4euniprojectsgeneral/pi1/templates/list.html
+	# template file for the detail view
 	templateDetail = typo3conf/ext/x4euniprojectsgeneral/pi1/templates/detail.html
+	# detail page uid for the persons
 	personSingleUid = {$persDB.detailPageUid}
+	# sysfolder containaing the projects
 	pages = {$projectDB.pidList}
+	# fields to display
 	orderFieldList=title
+	# order field
 	orderByList=projecttitle
+	# date format
 	dateFormat = %Y
 	listView{
 		results_at_a_time = 20
+		# template for category view
 		categoryViewTemplate = typo3conf/ext/x4euniprojectsgeneral/pi1/templates/listByCategory.html
+		# sysfolder uid containing the categories
 		categoryPidList = {$projectDB.pidList}
-		
+
+		# page browser settings, according to tslib_pibase
 		maxPages = 7
 		showResultCount = 1
 		showPBrowserText = 0
@@ -30,8 +40,13 @@ plugin.tx_x4euniprojectsgeneral_pi1 {
 		browseLinksWrap = |
 		pagefloat = center
 	}
+
+	listByCategory {
+		header = <p>W&auml;hlen Sie den Anfangsbuchstaben des Nachnahmens der Projektleiter</p>
+	}
 	
 	contact {
+		# template to use for the contact display
 		templateFile = typo3conf/ext/x4euniprojectsgeneral/pi1/templates/contact.html
 	}
 }
