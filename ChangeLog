@@ -1,3 +1,8 @@
+2010-08-30 Michel Georgy <michel-at-4eyes.ch>
+	* Reviewed code
+	* fixed possible sql injections
+	* Added javadoc comments
+
 2010-08-30 Markus Stauffiger <markus-at-4eyes.ch>
     * Added manual.swx
 	* Updated typoscript files
