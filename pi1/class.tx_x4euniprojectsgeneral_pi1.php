@@ -33,14 +33,54 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 	var $scriptRelPath = 'pi1/class.x4euniprojectsgeneral_pi1.php';	// Path to this script relative to the extension dir.
 	var $extKey = 'x4euniprojectsgeneral';	// The extension key.
 	var $pi_checkCHash = TRUE;
+
+	/**
+	* Name of the person extension
+	* @var string
+	*/
 	var $persExtKey = 'x4epersdb';
+	
+	/**
+	* Name of the table containing persons
+	* @var string
+	*/
 	var $personTable = 'tx_x4epersdb_person';
+	
+	/**
+	* Name of firstname field in person extension
+	* @var string
+	*/
 	var $firstNameField = 'firstname';
+	
+	/**
+	* Name of lastname field in person extension
+	* @var string
+	*/
 	var $lastNameField = 'lastname';
+	
+	/**
+	* Name of title field in person extension
+	* @var string
+	*/
 	var $titleField = 'title';
+	
+	/**
+	* Name of title_after field in person extension
+	* @var string
+	*/
 	var $titleAfterField = 'title_after';
+	
+	/**
+	* Name of the table containing projects
+	* @var string
+	*/
 	var $table = 'tx_x4euniprojectsgeneral_list';
 	var $tableName = 'tx_x4euniprojectsgeneral_list';
+	
+	/**
+	* Name of the table containing categories
+	* @var string
+	*/
 	var $categoryTable = 'tx_x4euniprojectsgeneral_category';
 
 	/**
@@ -190,7 +230,7 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 	    		$this->internal['orderByList']='projecttitle, projectmanagement, personsinvolved';
 
 				//ugly workaround for searching ids in blob:
-				$Wuids = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid',$this->personTable,'1 '.$this->cObj->enableFields($this->personTable).$this->cObj->searchWhere($this->piVars['sword'],$this->lastNameField.','.$this->firstNameField,$this->personTable));
+				$Wuids = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid',$this->personTable,'1 '.$this->cObj->enableFields($this->personTable).$this->cObj->searchWhere($GLOBALS['TYPO3_DB']->escapeStrForLike($this->piVars['sword'],$this->personTable),$this->lastNameField.','.$this->firstNameField,$this->personTable));
 				$pm_or = '';
 				$pi_or = '';
 				foreach ($Wuids as $w){
@@ -199,7 +239,7 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 				}
 
 	    		// Make Where Statement
-	    		$WHERE .= 'AND (1 '.$this->cObj->searchWhere($this->piVars['sword'],$this->internal['searchFieldList'],$this->table).chr(10);
+	    		$WHERE .= 'AND (1 '.$this->cObj->searchWhere($GLOBALS['TYPO3_DB']->escapeStrForLike($this->piVars['sword'],$this->personTable),$this->internal['searchFieldList'],$this->table).chr(10);
 				$WHERE .= $pm_or . $pi_or;
 				$WHERE .= ')';
 
@@ -272,7 +312,7 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 		// very important! if not reset to zero sql query has bad wrong 'limits'
 		$this->piVars['pointer'] = 0;
 		// Make listing query, pass query to SQL database:
-		$WHERE = 'AND uid = '.$this->piVars['showUid'];
+		$WHERE = 'AND uid = '.intval($this->piVars['showUid']);
 		$res = $this->pi_exec_query($this->table,0,$WHERE);
 		$this->internal['currentRow'] = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
@@ -703,6 +743,7 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 		if(!is_array($user)){
 			$user = $this->pi_getRecord($this->tableNameUsers,intval($user));
 		}
+		// @todo: hardcoded table fields. Use defined variables instead
 		return $user['title']." ".$user['tx_listfeuseruni_firstname']." ".$user['name']." ".$user['tx_listfeuseruni_title_after'];
 	}
 
@@ -840,7 +881,7 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 	 */
 	function getContactInfo() {
 		$persPi3 = t3lib_div::makeInstance('tx_'.$this->persExtKey.'_pi3');
-		$project = $this->pi_getRecord($this->table,$this->piVars['showUid']);
+		$project = $this->pi_getRecord($this->table,intval($this->piVars['showUid']));
 		$persPi3->cObj = $this->cObj;
 		$conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_'.$this->persExtKey.'_pi3.'];
 		$conf['templateFile'] = $this->conf['contact.']['templateFile'];
