@@ -144,7 +144,7 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 	function main($content,$conf)	{
 		$this->init($content,$conf);
 
-		if ($this->pi_getFFvalue($this->cObj->data['pi_flexform'],'modeSelection')=='contact') {
+		if ($this->getTSFFvar('modeSelection') == 'contact') {
 			$out = $this->getContactInfo();
 		} else {
 			if (strstr($this->cObj->currentRecord,'tt_content'))	{
@@ -182,7 +182,7 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 		$this->cellT[0] = $this->cObj->getSubpart($this->rowT[0],'###cell###');
 		$this->cellT[1] = $this->cObj->getSubpart($this->rowT[1],'###cell###');
 
-		$this->fields = t3lib_div::trimExplode(',', $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'fieldsList'));
+		$this->fields = t3lib_div::trimExplode(',', $this->getTSFFvar('fieldsList'));
 		$this->personSingleUid = $this->conf['personSingleUid'];
 
 		$lConf = $this->conf['listView.'];	// Local settings for the listView function
@@ -193,7 +193,7 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 			return $this->singleView($content,$conf);
 		} else {
 			// get uid of page where single view is diplayed
-    		$this->singleUid = $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'detailPageUid');
+    		$this->singleUid = $this->getTSFFvar('detailPageUid');
     		if($this->singleUid == ''){
     			$this->singleUid = $GLOBALS['TSFE']->id;
     		}
@@ -513,7 +513,8 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 				break;
 
 				default:
-					$values .= $this->internal['currentRow'][$key];
+					//$values .= $this->internal['currentRow'][$key];
+					$values = parent::getFieldContent($key);
 				break;
 		}
 

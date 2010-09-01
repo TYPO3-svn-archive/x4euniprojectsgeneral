@@ -1,6 +1,9 @@
 projectDB {
 	# sysfolder containaing the projects
 	pidList =
+
+	# detail single pid
+	detailPageUid = 
 }
 
 # see also x4epersdb/ext_typoscript_constants for additional, persDB related
