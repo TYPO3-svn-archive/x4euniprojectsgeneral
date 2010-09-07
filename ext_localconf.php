@@ -17,4 +17,15 @@ t3lib_extMgm::addTypoScript($_EXTKEY,'setup','
 	tt_content.shortcut.20.0.conf.tx_x4euniprojectsgeneral_list = < plugin.'.t3lib_extMgm::getCN($_EXTKEY).'_pi1
 	tt_content.shortcut.20.0.conf.tx_x4euniprojectsgeneral_list.CMD = singleView
 ',43);
+
+
+// scheduler task
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_x4euniprojectsgeneral_import'] = array(
+    'extension'        => $_EXTKEY,
+    'title'            => 'Projektimport aus der zFDB',
+    'description'      => 'Import der Projekte aus der zentralen Forschungsdatenbank.',
+    'additionalFields' => 'tx_x4euniprojectsgeneral_import_additionalfieldprovider'
+);
+
+
 ?>

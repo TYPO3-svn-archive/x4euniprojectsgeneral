@@ -26,11 +26,14 @@ CREATE TABLE tx_x4euniprojectsgeneral_list (
 	link3 tinytext NOT NULL,
 	description text NOT NULL,
 	comment text NOT NULL,
+	keywords text NOT NULL,
 	methodology text NOT NULL,
 	picture blob NOT NULL,
 	finished tinyint(3) DEFAULT '0' NOT NULL,
 	category blob NOT NULL,
 	contact int(11) DEFAULT '0' NOT NULL,
+	rdborgid int(11) NOT NULL,
+  	fdb_id int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)

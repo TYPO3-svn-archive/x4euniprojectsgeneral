@@ -217,6 +217,15 @@ $TCA["tx_x4euniprojectsgeneral_list"] = Array (
 				),
 			)
 		),
+		"keywords" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:x4euniprojectsgeneral/locallang_db.php:tx_x4euniprojectsgeneral_list.keywords",		
+			"config" => Array (
+				"type" => "text",
+				"cols" => "30",	
+				"rows" => "3",
+			)
+		),
 		"methodology" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:x4euniprojectsgeneral/locallang_db.php:tx_x4euniprojectsgeneral_list.methodology",		
@@ -271,9 +280,16 @@ $TCA["tx_x4euniprojectsgeneral_list"] = Array (
 				'maxitems' => 999,
 			)
 		),
+		"fdb_id" => Array (
+			"exclude" => 1,
+			"label" => "ID in university research database",
+			"config" => Array (
+				"type" => "none",
+			)
+		),
 	),
 	"types" => Array (
-		"0" => Array("showitem" => "hidden;;1;;1-1-1, projecttitle, category, contact, finished, projectmanagement, externalprojectmanagement, personsinvolved, externalpersonsinvolved, start, end, collaboration, financing, volume, link1, link2, link3, description;;;richtext[paste|bold|italic|underline|formatblock|class|left|center|right|orderedlist|unorderedlist|outdent|indent|link|image]:rte_transform[flag=rte_enabled|mode=ts];3-3-3, methodology;;;richtext[paste|bold|italic|underline|formatblock|class|left|center|right|orderedlist|unorderedlist|outdent|indent|link|image]:rte_transform[flag=rte_enabled|mode=ts];3-3-3,comment;;;richtext[paste|bold|italic|underline|formatblock|class|left|center|right|orderedlist|unorderedlist|outdent|indent|link|image]:rte_transform[flag=rte_enabled|mode=ts];3-3-3,picture")
+		"0" => Array("showitem" => "hidden;;1;;1-1-1, projecttitle, category, contact, finished, projectmanagement, externalprojectmanagement, personsinvolved, externalpersonsinvolved, start, end, collaboration, financing, volume, link1, link2, link3, description;;;richtext[paste|bold|italic|underline|formatblock|class|left|center|right|orderedlist|unorderedlist|outdent|indent|link|image]:rte_transform[flag=rte_enabled|mode=ts];3-3-3, methodology;;;richtext[paste|bold|italic|underline|formatblock|class|left|center|right|orderedlist|unorderedlist|outdent|indent|link|image]:rte_transform[flag=rte_enabled|mode=ts];3-3-3,comment;;;richtext[paste|bold|italic|underline|formatblock|class|left|center|right|orderedlist|unorderedlist|outdent|indent|link|image]:rte_transform[flag=rte_enabled|mode=ts];3-3-3,keywords,picture")
 	),
 	"palettes" => Array (
 		"1" => Array("showitem" => "starttime, endtime")
