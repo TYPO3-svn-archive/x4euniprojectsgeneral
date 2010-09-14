@@ -427,8 +427,17 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 							unset($out);
 
 							$persListId = $this->conf['persDB.']['personListUid'];
+							
+							$profileUid = 0;
 
-							if(intval($persListId)){
+							if($this->getTSFFvar('profilePageField') != ''){
+								$profileUid = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($this->getTSFFvar('profilePageField'),$this->personTable,'uid = ' . $params['tx_'.$this->persExtKey.'_pi1[showUid]'] . $this->cObj->enableFields($this->personTable));
+								$profileUid = $profileUid[0][$this->getTSFFvar('profilePageField')];
+							}
+							
+							if($profileUid > 0){
+								array_push($personArray,$this->pi_linkTP($persLinkText,$params,1,$profileUid));
+							} else if(intval($persListId)){
 								array_push($personArray,$this->pi_linkTP($persLinkText,$params,1,$persListId));
 							} else {
 								array_push($personArray,$this->pi_linkTP($persLinkText,$params,1,$this->personSingleUid));
@@ -887,6 +896,7 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 	 * @return string
 	 */
 	function getContactInfo() {
+		require_once(PATH_site . 'typo3conf/ext/'.$this->persExtKey.'/pi3/class.tx_'.$this->persExtKey.'_pi3.php');
 		$persPi3 = t3lib_div::makeInstance('tx_'.$this->persExtKey.'_pi3');
 		$project = $this->pi_getRecord($this->table,intval($this->piVars['showUid']));
 		$persPi3->cObj = $this->cObj;

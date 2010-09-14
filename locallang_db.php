@@ -28,7 +28,7 @@ $LOCAL_LANG = Array (
 		'tx_x4euniprojectsgeneral_list.category' => 'Category',	
 		'tx_x4euniprojectsgeneral_category' => 'Projectcategory',	
 		'tx_x4euniprojectsgeneral_category.cattitle' => 'Category title',
-		'tt_content.list_type_pi1' => 'Project administrator',	
+		'tt_content.list_type_pi1' => 'Project database',	
 	),
 	'de' => Array (
 		'tx_x4euniprojectsgeneral_list' => 'Projekte',	

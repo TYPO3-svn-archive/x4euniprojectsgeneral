@@ -24,6 +24,9 @@ plugin.tx_x4euniprojectsgeneral_pi1 {
 
 	# detail single pid
 	detailPageUid = {$projectDB.detailPageUid}
+	
+	# field in persdb db table which contains uid of user profile page
+	profilePageField = {$projectDB.profilePageField}
 
 	listView{
 		results_at_a_time = 20

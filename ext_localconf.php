@@ -22,8 +22,8 @@ t3lib_extMgm::addTypoScript($_EXTKEY,'setup','
 // scheduler task
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_x4euniprojectsgeneral_import'] = array(
     'extension'        => $_EXTKEY,
-    'title'            => 'Projektimport aus der zFDB',
-    'description'      => 'Import der Projekte aus der zentralen Forschungsdatenbank.',
+    'title'            => 'Project OAI import',
+    'description'      => 'Import from OAI API',
     'additionalFields' => 'tx_x4euniprojectsgeneral_import_additionalfieldprovider'
 );
 

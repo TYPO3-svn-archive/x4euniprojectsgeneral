@@ -4,6 +4,9 @@ projectDB {
 
 	# detail single pid
 	detailPageUid = 
+	
+	# db field which holds user profile page uid. 
+	profilePageField =
 }
 
 # see also x4epersdb/ext_typoscript_constants for additional, persDB related

@@ -1,3 +1,6 @@
+2010-09-14 Michel Georgy <michel-at-4eyes.ch>
+	* fixed missing require
+
 2010-08-31 Markus Stauffiger <markus-at-4eyes.ch>
 	* changed pi1/locallang to xml structure
 	* localized detail.html template

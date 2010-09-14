@@ -8,48 +8,68 @@ class tx_x4euniprojectsgeneral_import extends tx_scheduler_Task {
 	
 	var $_EXTKEY = 'x4euniprojectsgeneral';
 	
-	// var $projpid;
-	// Fields set by additional field provider
+	// Fields set by 'additional field provider'
 	/**
-	* Pid for projects 
-	*/
-	var $projpid = 2941;
+	 * Pid for projects 
+	 * @var string
+	 */
+	var $projpid;
+
 	/**
-	* username for oai
-	*/
+	 * username for oai
+	 * @var string
+	 */
 	var $oaiuser;
+	
 	/**
-	* password for oai
-	*/
+	 * password for oai
+	 * @var string
+	 */
 	var $oaipw;
+	
 	/**
-	* url to oai
-	*/
+	 * url to oai
+	 * @var string
+	 */
 	var $oaiurl;
+	
 	/** 
-	* if value is set, all project will be imported
-	*/
+	 * if value is set, all project will be imported
+	 * @var boolean
+	 */
 	var $getall;
 	
-	// Properties set by project_import_localconf located in fileadmin/localconfs/ 
+	// Properties set by project_import_localconf located in 'fileadmin/localconfs/'
 	/**
-	* contains category matching, title, pid's and orgid range.
-	*/
+	 * contains category matching, title, pid's and orgid range.
+	 * @var array
+	 */
 	var $mapping;
+	
 	/**
-	* contains the configuration, e.g. table names etc.
-	*/
+	 * contains the configuration, e.g. table names etc.
+	 * @var array
+	 */
 	var $config;
 	
-	
+	/**
+	 * OAI url
+	 * @var string
+	 */
 	var $url;
+	
+	/**
+	 * resumtion url, used to resume a import, because results are divided in pages (200 records each)
+	 * @var string
+	 */
 	var $resumptionUrl;
 	
 	
 	
 	/**
-	* The main class of the scheduler task
-	*/
+	 * The main class of the scheduler task
+	 * @return boolean true if operation succeded. otherwise false
+	 */
 	public function execute(){
 		$this->mapping = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->_EXTKEY]['projectsMapping'][$this->projpid];
 		$this->config = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->_EXTKEY]['configProjectsImport'];
@@ -62,9 +82,6 @@ class tx_x4euniprojectsgeneral_import extends tx_scheduler_Task {
 		}
 		
 		$this->dbgMsg[] = 'Running import for "'.$this->mapping['title'].'"';
-		
-		// @TODO: change url, user, pass to additionalparams
-		// Get all records of specific institute
 
 		$this->url = $this->oaiurl . '&metadataPrefix=fdb_proj&filterStatus=PBL&filterOrgExt=' . $this->mapping['rdborgid_from'] . '&filterOrgExtTo=' .$this->mapping['rdborgid_to'];
 		$this->resumptionUrl = $this->oaiurl .'&resumptionToken=';
@@ -75,17 +92,11 @@ class tx_x4euniprojectsgeneral_import extends tx_scheduler_Task {
 		foreach ($xmlArr as $xml){
 			$importData = array_merge($importData, $this->oaiXmlToArr($xml));
 		}
-		if($_SERVER['REMOTE_ADDR'] == '109.164.219.204'){
-//			t3lib_div::debug($importData);
-		}
-				
+			
 		$ret = $this->doImport($importData);
-		//Ausgabe der Anzahl behandelten Records
-		//if ($this->verbose)echo "***<br/>";
 		$this->dbgMsg[] = "Inserted: " . $ret['inserted'] . " | Updated: " . $ret['updated'] . " | Deleted: " . $ret['deleted']. " | Failed: " . $ret['failed'];
 	
 		t3lib_div::debug($this->dbgMsg);
-		//mail("manuel@4eyes.ch", "Projekt Import", $this->projpid . " - Projekt Import beendet am ".date("m.d.y - H:i:s"),"from:ius");
 		
 		if(intval($ret['failed']) > 0 ) {
 			return false;
@@ -97,20 +108,19 @@ class tx_x4euniprojectsgeneral_import extends tx_scheduler_Task {
 	
 	
 	/**
-	* retrieves xml data from oai
-	* return Array of xml files
-	*/
+	 * retrieves xml data from oai
+	 * @return array array of xml files
+	 */
 	function getDataFromOai(){
 		$xmlArr = array();
 		// Get xmlstr over oai
 		$xmlstr = $this->file_post_contents($this->url,false,$this->oaiuser,$this->oaipw);
-//		t3lib_div::debug($xmlstr);
 		$xmlArr[0] = new SimpleXMLElement($xmlstr);
 
 		// Used to limit the oai calls
 		$count = 0;
 		
-		// if a resumptionToken is set get further data
+		// if a resumptionToken is set, get further data
 		while($xmlArr[$count]->ListRecords->resumptionToken != '' && $count < $this->config['maxresumptionToken']){
 			$url = $this->resumptionUrl . $xmlArr[$count]->ListRecords->resumptionToken[0];
 			$xmlstr = $this->file_post_contents($url,false,$this->oaiuser,$this->oaipw);
@@ -124,8 +134,9 @@ class tx_x4euniprojectsgeneral_import extends tx_scheduler_Task {
 	
 	
 	/**
-	* parses xml and returns an array
-	*/
+	 * parses the oai xml
+	 * @return array of xml contents
+	 */
 	function oaiXmlToArr($xml){
 		$importData = array();
 		foreach ($xml->ListRecords->record as $record) {
@@ -133,50 +144,12 @@ class tx_x4euniprojectsgeneral_import extends tx_scheduler_Task {
 			$ns['dc'] = $ns_dc->children('http://purl.org/dc/elements/1.1/');
 			$ns['fdb'] = $ns_dc->children('http://purl.org/forschdb_project/');
 			
-			//xml childrens in array einfügen, Format abhängig von key
+			//insert xml children in array, depending on key
 			$tmpArray = array();
 			foreach($ns as $nsid => $nsel){
 			
 				foreach($nsel as $skey => $svalue) {
 					switch($skey){
-						/*
-						case 'creator':
-						case 'editor':
-							//$svalue = html_entity_decode($svalue, ENT_QUOTES, "utf-8");
-							if($this->config['u8toIso']) $svalue = utf8_decode($svalue);
-							$svalue = html_entity_decode($svalue);
-	//								$svalue = htmlspecialchars_decode($svalue, ENT_QUOTES);
-							if (array_key_exists($skey,$tmpArray)) $tmpArray[$skey] .= ";". trim($svalue);
-							else $tmpArray[$skey] = trim($svalue);
-						break;
-						case 'unibasauthor':
-						case 'unibaseditor':
-						case 'unibascreator':
-							foreach($svalue as $akey => $avalue){
-								if($this->config['u8toIso']) $avalue = utf8_decode($avalue);
-								$avalue = html_entity_decode($avalue);
-								switch($akey){										
-									case 'unibasauthor_dni':
-									case 'unibaseditor_dni':
-									case 'unibascreator_dni':
-									case 'principalinvestigator_dni':
-									case 'projectmember_dni':
-									case 'unibasauthor_mcssid':
-									case 'unibaseditor_dni':
-									case 'unibascreator_mcssid':
-									case 'principalinvestigator_mcssid':
-									case 'projectmember_mcssid':
-										if (array_key_exists($akey,$tmpArray)) $tmpArray[$akey] .= ",".trim($avalue);
-										else $tmpArray[$akey] = trim($avalue);
-									break;
-									default:
-										if (array_key_exists($akey,$tmpArray)) $tmpArray[$akey] .= trim((string)($avalue));
-										else $tmpArray[$akey] = trim((string)($avalue));
-									break;
-								}
-							}
-						break;
-						*/
 						case 'principalinvestigator_dni':
 						case 'coprincipalinvestigator_dni':
 						case 'projectmember_dni':
@@ -203,10 +176,8 @@ class tx_x4euniprojectsgeneral_import extends tx_scheduler_Task {
 							else $tmpArray[$skey] = trim((string)($svalue));
 						break;
 						default:
-	//								$svalue = str_replace('∕', '/', $svalue);
 							$svalue = str_replace('&#8260;', '/', $svalue);
 							$svalue = html_entity_decode($svalue, ENT_QUOTES, "utf-8");
-							//t3lib_div::debug($svalue);
 							if($this->config['u8toIso']) $svalue = utf8_decode($svalue);
 							if (array_key_exists($skey,$tmpArray)) $tmpArray[$skey] .= trim((string)($svalue));
 							else $tmpArray[$skey] = trim((string)($svalue));
@@ -222,8 +193,9 @@ class tx_x4euniprojectsgeneral_import extends tx_scheduler_Task {
 	
 	
 	/**
-	* mapps fields and writes data to db
-	*/
+	 * mapps fields and writes data to db
+	 * @return array assoc array with counters
+	 */
 	function doImport($input){
 		$count = array( 'updated' => 0, 'inserted' => 0, 'failed' => 0, 'deleted' => 0);
 		//Alle fdb_ids aus der ProjektDB zur überprüfung ob bereits vorhanden
@@ -236,12 +208,8 @@ class tx_x4euniprojectsgeneral_import extends tx_scheduler_Task {
 		foreach($fdb as $f) $fdb_ids[] = $f['fdb_id'];
 		foreach($input as $record){
 			$mArr = array();
-			
-			//$contact = 
-			
-			//$publisher = matchPersons(parseNames($record['publisher']), $record['unibascreator_dni']);
-			
-			// Match persons1
+
+			// Match persons
 			$principalInvestigator = $this->matchPersons($record['principalinvestigator_dni'], $record['principalinvestigator_mcssid'], $this->mapping['pid_pers']);
 			$coPrincipalInvestigator = $this->matchPersons($record['coprincipalinvestigator_dni'], $record['coprincipalinvestigator_mcssid'], $this->mapping['pid_pers']);
 			$projectMember = $this->matchPersons($record['projectmember_dni'], $record['projectmember_mcssid'], $this->mapping['pid_pers']);
@@ -249,22 +217,24 @@ class tx_x4euniprojectsgeneral_import extends tx_scheduler_Task {
 			if($personsinvolved != '' && $projectMember != '') $personsinvolved .= ",";
 			$personsinvolved .= $projectMember; 
 			
+			//$contact = '';
+			
 			$mArr['pid'] = $this->mapping['pid_proj'];
-			$mArr['tstamp'] = strtotime($record['lastupdate']);
-			$mArr['crdate'] = strtotime($record['creationdate']);
-			$mArr['projecttitle'] = $record['title'];
+			$mArr['tstamp'] = ($record['lastupdate']) ?  strtotime($record['lastupdate']): '';
+			$mArr['crdate'] = ($record['creationdate']) ?  strtotime($record['creationdate']): '';
+			$mArr['projecttitle'] = ($record['title']) ?  $record['title']: '';
 			$mArr['projectmanagement'] = $principalInvestigator;
 			//$mArr['externalprojectmanagement'] = '';
 			$mArr['personsinvolved'] = $personsinvolved;
 			//$mArr['externalpersonsinvolved'] = '';
-			$mArr['start'] = strtotime($startdate);
-			$mArr['end'] = strtotime($enddate);
-			$mArr['financing'] = $record['financedby'];
+			$mArr['start'] = ($record['startdate']) ?  $record['startdate']: '';
+			$mArr['end'] = ($record['enddate']) ?  $record['enddate']: '';
+			$mArr['financing'] = ($record['financedby']) ?  $record['financedby']: '';
 			//$mArr['collaboration'] = '';
 			//$mArr['volume'] = '';
 			$mArr['link1'] = ($record['url']) ?  $record['url']: '';
 			//$mArr['link2'] = '';
-			$mArr['description'] = ($record['description']);
+			$mArr['description'] = ($record['description']) ?  $record['description']: '';
 			//$mArr['comment'] = '';
 			//$mArr['methodology'] = '';
 			//$mArr['picture'] = '';
@@ -280,65 +250,24 @@ class tx_x4euniprojectsgeneral_import extends tx_scheduler_Task {
 			//insert or update mArr to projDB
 			if (in_array($mArr['fdb_id'], $fdb_ids)){
 				if($GLOBALS['TYPO3_DB']->exec_UPDATEquery($this->config['tableProjDb'],'fdb_id = '. $mArr['fdb_id'],$mArr)){
-					if ($this->verbose)echo $mArr['fdb_id'].": UPDATED <br/>";
 					$count['updated']++;
 				} else {
-					if ($this->verbose)echo $mArr['fdb_id'].": FAILED <br/>";
+					t3lib_div::debug($mArr['fdb_id'].": FAILED ", "Error");
 					$count['failed']++;
 				}
 			} else {
 				$mArr['crdate'] = time();
 				if($GLOBALS['TYPO3_DB']->exec_INSERTquery($this->config['tableProjDb'],$mArr)){
-					if ($this->verbose)echo $mArr['fdb_id'].": INSERTED </br>";
 					$count['inserted']++;
 				} else {
-					if ($this->verbose)echo $mArr['fdb_id'].": FAILED <br/>";
+					t3lib_div_debug($mArr['fdb_id'].": FAILED","Error");
 					$count['failed']++;
 				}
 			}
 			$procFdbIds[] = $mArr['fdb_id'];
-			
-			
-			
-		//	t3lib_div::debug($GLOBALS['TYPO3_DB']->UPDATEquery($this->config['tableProjDb'],'fdb_id = '. $mArr['fdb_id'],$mArr));
-//			$ccc++;
-//			if($ccc < 5 ) die("processed 5");
-						
-			/*
-			//add relations to mm tables (author and publisher)
-			$recUid = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid',$this->config['tablePublDb'],'fdb_id = '.$mArr['fdb_id'].' AND deleted = 0 AND hidden = 0');
-			if($recUid){
-				$recUid = $recUid[0]['uid'];
-				//remove old relations first: 
-				
-				 	if($GLOBALS['TYPO3_DB']->exec_DELETEquery($this->config['tablePublDbMMAuthor'],'uid_local = '.$recUid)){
-						if ($this->verbose) echo " - Author relations removed </br>";
-				}
-					if($GLOBALS['TYPO3_DB']->exec_DELETEquery($this->config['tablePublDbMMPublisher'],'uid_local = '.$recUid)){
-						if ($this->verbose) echo " - Publisher relations removed </br>";
-				}
-				
-				//add new relations:
-				foreach(explode(",",$author['int']) as $a_id){
-					if ($a_id != '') { 
-						if($GLOBALS['TYPO3_DB']->exec_INSERTquery($this->config['tablePublDbMMAuthor'],array('uid_local' => $recUid, 'uid_foreign' => $a_id))){
-							if ($this->verbose) echo " + Author relations created </br>";
-						}
-					}
-				}
-				foreach(explode(",",$publisher['int']) as $p_id){
-					if ($p_id != ''){
-						if($GLOBALS['TYPO3_DB']->exec_INSERTquery($this->config['tablePublDbMMPublisher'],array('uid_local' => $recUid, 'uid_foreign' => $p_id))){
-							if ($this->verbose) echo " + Publisher relations created </br>";
-						}
-					}
-				}
-				
-			}
-			*/
 		}
 		//delete publications
-		$count['deleted'] = 0; //deleteOldPublications($procFdbIds);
+		$count['deleted'] = $this->deleteOldPublications($procFdbIds);
 		return $count;
 		
 	}
@@ -346,9 +275,10 @@ class tx_x4euniprojectsgeneral_import extends tx_scheduler_Task {
 	
 	
 	/**
-	* matches fdb users to local users. 
-	* fdb_id (dni) needs to be set before import.
-	*/
+	 * matches fdb users to local users. 
+	 * fdb_id (dni) needs to be set before import.
+	 * @return string matched person in comma seperated list
+	 */
 	function matchPersons($int_ids, $int_mcssids, $pid = -1){
 		$int = '';
 		$int_ids = ($int_ids) ? $int_ids : -1;
@@ -370,8 +300,9 @@ class tx_x4euniprojectsgeneral_import extends tx_scheduler_Task {
 	
 	
 	/**
-	* Gets xml string from oai
-	*/
+	 * Gets xml string from oai
+	 * @return string with xml data
+	 */
 	function file_post_contents($url,$headers=false,$user='',$pass='') {
 		$url = parse_url($url);
 		
