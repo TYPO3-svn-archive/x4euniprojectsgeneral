@@ -20,7 +20,7 @@ plugin.tx_x4euniprojectsgeneral_pi1 {
 	browseLastAlpha =
 
 	# field to use the alphabetic page browser on
-	alphaSortField = 
+	alphaSortField = projecttitle
 
 	# detail single pid
 	detailPageUid = {$projectDB.detailPageUid}

@@ -96,8 +96,6 @@ class tx_x4euniprojectsgeneral_import extends tx_scheduler_Task {
 		$ret = $this->doImport($importData);
 		$this->dbgMsg[] = "Inserted: " . $ret['inserted'] . " | Updated: " . $ret['updated'] . " | Deleted: " . $ret['deleted']. " | Failed: " . $ret['failed'];
 	
-		t3lib_div::debug($this->dbgMsg);
-		
 		if(intval($ret['failed']) > 0 ) {
 			return false;
 		} else {
@@ -161,14 +159,13 @@ class tx_x4euniprojectsgeneral_import extends tx_scheduler_Task {
 								else $tmpArray[$skey] = trim($svalue);
 							}
 						break;
-						
 						case 'type':
 							foreach($svalue->attributes() as $okey => $ovalue){
 								if($this->config['u8toIso']) $ovalue = utf8_decode($ovalue);
 								$ovalue = html_entity_decode($ovalue);
 								if (array_key_exists($okey,$tmpArray)) $tmpArray[$okey] .= trim((string)($ovalue));
 								else $tmpArray[$okey] = trim((string)($ovalue));
-						}
+							}
 						break;
 						case 'rdborgid':
 							if($this->config['u8toIso']) $svalue = utf8_decode($svalue);
@@ -351,152 +348,6 @@ class tx_x4euniprojectsgeneral_import extends tx_scheduler_Task {
 
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	// Obsolete functions.  used in publication import
-/*
-	function cond_explode($token, $str, $cond = '&'){
-		if(strpos($str, $cond)>0){
-			$pos = 0;
-			$offset = 0;
-			$arr = array(); 
-			$tpos = strpos($str,$token,$offset);
-			$max = 0;
-			
-			while ($tpos != false && $max++ < 5){
-				$t = substr($str, $pos, $tpos-$pos);
-				if(preg_match('/[0-9]$/', $t)==0){
-					$arr[] = $t;
-					$pos = $tpos+1;
-					$offset = $pos;
-				}else {
-					$offset = $tpos+1;
-				}
-				$tpos = strpos($str,$token,$offset);
-			}
-			if(sizeof($arr) == 0) $arr[] = $str;
-			return $arr;
-		} else {
-			return explode($token, $str);
-		}
-	}
-	
-	
-	function xml2phpArray($xml,$arr){
-	    $iter = 0;
-	        foreach($xml->children() as $b){
-	                $a = $b->getName();
-	                if(!$b->children()){
-	                        $arr[$a] = trim($b[0]);
-	                }
-	                else{
-	                        $arr[$a][$iter] = array();
-	                        $arr[$a][$iter] = xml2phpArray($b,$arr[$a][$iter]);
-	                }
-	        $iter++;
-	        }
-	        return $arr;
-	} 
-	
-	// Es werden alle Publicationen gelöscht welche eine fdb_id besitzen aber nicht im array $fdbids vorhanden sind
-	// Dies muss beachtet werden falls der Import angepasst wird, zB nur abrufen von bestimmten Publicationen.
-	function deleteOldPublications($fdbids){
-		$count = 0;
-		$WHERE = 'pid = '.$this->mapping['pid_publ'] . ' AND fdb_id != 0 AND fdb_id NOT IN ('.implode(",", $fdbids).')';
-		$delPubs = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('fdb_id',$this->config['tablePublDb'],$WHERE);
-		
-		if($GLOBALS['TYPO3_DB']->exec_DELETEquery($this->config['tablePublDb'],$WHERE )){
-			foreach($delPubs as $pub){
-				if ($this->verbose)echo $pub['fdb_id'].": DELETED </br>";
-				$count++;
-			}
-		}
-		
-		return $count;
-	}
-	
-	*/
-	
-	/*
-	function parseNames($cStr = ''){
-		if ($cStr == '') return;
-	//	$cArr = explode(';', trim($cStr));
-		$cArr = $this->cond_explode(';', trim($cStr), '&');
-		$names = array();
-		if (is_array($cArr)){
-			foreach($cArr as $key => $value){
-				$p = explode(',', trim($value));
-				//$p[0] = str_replace(chr(20), "", ($p[0]));
-				$names[] = array('lastname' => trim($p[0], "\xc2\xa0"), 'firstname' => trim($p[1], "\xc2\xa0"));
-			}
-		} else {
-			$p = explode(',', trim($cArr));
-			$names[] = array('lastname' => $p[0], 'firstname' => $p[1]); 
-		}
-		return $names;
-	}
-	*/
-	
-	/*
-	function omatchPersons($persons, $int_ids, $int_mcssids){
-		$sorting = '';
-		$sorting_text = array();
-		$ext = '';
-		$int = '';
-		$int_ids = ($int_ids) ? $int_ids : -1;
-		$int_mcssids = ($int_mcssids) ? $int_mcssids : -1;
-		$ext_ct = 1;
-		$pers_int = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid, lastname, firstname',$this->config['tablePersDb'],'(dni IN ('.$int_ids.') OR mcss_id IN ('.$int_mcssids.')) AND deleted = 0 AND hidden = 0');
-		foreach($pers_int as $i){
-			$int .= $i['uid'].",";
-		}
-		
-		if ($persons != ''){
-			foreach($persons as $key => $person){
-				$is_int = false;
-				// Check if name matches
-				
-				foreach($pers_int as $i){
-					if (trim(strtolower(($i['lastname']))) == trim(strtolower($person['lastname'])) && trim(strtolower(($i['firstname']))) == trim(strtolower($person['firstname']))){
-						$sorting .= $i['uid'].",";
-						$sorting_text[] = ($i['lastname']).", ".($i['firstname']);
-						$is_int = true;
-						break;
-					}
-				}
-				if (!$is_int){
-					// If name not matched before check for short firstnames
-					foreach($pers_int as $i){
-						if (trim(strtolower(($i['lastname']))) == trim(strtolower($person['lastname'])) && substr(trim(strtolower(($i['firstname']))),0,1) == substr(trim(strtolower($person['firstname'])),0,1)){
-							$sorting .= $i['uid'].",";
-							$sorting_text[] = ($i['lastname']).", ".($i['firstname']);
-							$is_int = true;
-							break;
-						}
-					}
-				}
-				if(!$is_int){
-					$sorting .= 'ext-'.$ext_ct.",";
-					$sorting_text[] = $person['lastname'].",".$person['firstname'];
-					$ext .= $person['lastname'].",".$person['firstname'].",".$ext_ct."\n";
-					$ext_ct++;
-				}
-			}
-		}
-		
-		return array('sorting' => trim($sorting, ',') , 'sorting_text' => implode("; ",$sorting_text), 'ext' => $ext, 'int' => $int);
-	}
-	*/
-	
-	
-	
-	}
+}
 
 ?>

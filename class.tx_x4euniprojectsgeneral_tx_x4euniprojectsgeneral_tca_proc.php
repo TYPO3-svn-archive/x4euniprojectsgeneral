@@ -30,7 +30,7 @@
 class tx_x4euniprojectsgeneral_tx_x4euniprojectsgeneral_tca_proc {
 	function main(&$params,&$pObj=0){
 		switch($pid) {
-                        // @todo: hardcoded uid!
+				// @todo: hardcoded uid!
 			case '8079':
 				$this->getPersons($params);
 			break;

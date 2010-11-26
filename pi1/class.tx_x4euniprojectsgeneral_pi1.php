@@ -853,7 +853,7 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 		}
 
 		if($this->getTSFFvar('modeSelection') == "pm_running" || $this->getTSFFvar('modeSelection') == "pm_finished"){
-			$order = "name ASC";
+			$order = $this->lastNameField." ASC";
 		} else {
 			$order = $TCA[$this->categoryTable]['ctrl']['sortby'];
 		}

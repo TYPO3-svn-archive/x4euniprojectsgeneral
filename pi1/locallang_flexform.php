@@ -16,9 +16,6 @@ $LOCAL_LANG = Array (
 		'modeAll' => 'all projects',
 		'modeCategory' => 'listByCategory',
 	),
-	'dk' => Array (
-		'list_mode_1' => 'Visning 1',	
-	),
 	'de' => Array (
 		'detailPageUid' => 'Detailseite',
 		'settings' => 'Einstellungen',
