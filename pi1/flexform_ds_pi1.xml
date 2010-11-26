@@ -68,6 +68,14 @@
 								<numIndex index="0">LLL:EXT:x4euniprojectsgeneral/pi1/locallang_flexform.php:contact</numIndex>
 								<numIndex index="1">contact</numIndex>
 							</numIndex>
+							<numIndex index="6" type="array">
+								<numIndex index="0">LLL:EXT:x4euniprojectsgeneral/pi1/locallang_flexform.php:pm_running</numIndex>
+								<numIndex index="1">pm_running</numIndex>
+							</numIndex>
+							<numIndex index="7" type="array">
+								<numIndex index="0">LLL:EXT:x4euniprojectsgeneral/pi1/locallang_flexform.php:pm_finished</numIndex>
+								<numIndex index="1">pm_finished</numIndex>
+							</numIndex>
 						</items>
 						<minitems>0</minitems>
 						<maxitems>1</maxitems>

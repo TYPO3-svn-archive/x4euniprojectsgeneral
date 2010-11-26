@@ -253,12 +253,13 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 				$res = $this->pi_exec_query($this->table,1,$WHERE);
 
 	    		list($this->internal['res_count']) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-
+				$desc = $this->internal['descFlag']?' DESC':'';				
 	    		// Make listing query, pass query to SQL database:
-
-				t3lib_div::loadTCA($this->table);
-				$res = $this->getListResultSet($this->table, $WHERE, 'name');
-
+	    		
+				$tmp = $this->internal['descFlag'];
+				$this->internal['descFlag'] = 0;
+				$res = $this->getListResultSet($this->table, $WHERE, 'lastname'.$desc.','.$this->personTable.'.firstname');
+				$this->internal['descFlag'] = $tmp;
 	    		$this->piVars['sword'] = $backupSearchWord;
 
 	    		// Put the whole list together:
@@ -268,7 +269,8 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 	    		$fullTable.=$this->pi_list_searchBox();
 
 	    		// Adds the result browser:
-				$mArr['###pageBrowser###'] = $this->pi_list_browseresults(1,'',$this->conf['listView.']);
+				$mArr['###pageBrowser###'] = $this->pi_list_browseresults(1,'',$this->conf['listView.'],'pointer',false);
+				 
 	    		// Adds the listsview
 	    		$fullTable .= $this->pi_list_makelist($res);
 
@@ -728,10 +730,10 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 	function renderCategory(&$category) {
 		global $TCA;
 
-		if(isset($this->conf['catCol'])){
-			$s['###list###'] = $this->listView(' AND (FIND_IN_SET('.intval($category['uid']).','.$this->conf['catCol'].') > 0)');
+		if(!empty($this->conf['catCol'])){
+			$s['###list###'] = $this->listView(' AND (FIND_IN_SET('.intval($category['uid']).','.$this->conf['catCol'].') > 0) ');
 		} else {
-			$s['###list###'] = $this->listView(' AND (FIND_IN_SET('.intval($category['uid']).',projectmanagement) > 0)');
+			$s['###list###'] = $this->listView(' AND (FIND_IN_SET('.intval($category['uid']).',projectmanagement) > 0) ');
 		}
 
 		if ($this->internal['res_count'] > 0){

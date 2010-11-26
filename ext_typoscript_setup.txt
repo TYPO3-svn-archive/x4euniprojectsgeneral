@@ -20,7 +20,7 @@ plugin.tx_x4euniprojectsgeneral_pi1 {
 	browseLastAlpha =
 
 	# field to use the alphabetic page browser on
-	alphaSortField = projecttitle
+	alphaSortField = lastname
 
 	# detail single pid
 	detailPageUid = {$projectDB.detailPageUid}
@@ -64,9 +64,8 @@ plugin.tx_x4euniprojectsgeneral_pi1 {
 		header = <p>W&auml;hlen Sie den Anfangsbuchstaben des Nachnahmens der Projektleiter</p>
 	}
 
-	# column containing the category
-	catCol = category
-
+	# column containing the category (set "category" or "projectmanagement")
+	catCol=
 	# contact information
 	contact {
 		# template to use for the contact display
