@@ -309,7 +309,7 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 	function singleView()	{
 		// get template File for single view
 		$this->templateSingle = $this->cObj->fileResource($this->conf['templateDetail']);
-
+		$this->personSingleUid = $this->conf['personSingleUid'];
 		// This sets the title of the page for use in indexed search results:
 		if ($this->internal['currentRow']['title'])	$GLOBALS['TSFE']->indexedDocTitle=$this->internal['currentRow']['title'];
 
@@ -478,7 +478,7 @@ class tx_x4euniprojectsgeneral_pi1 extends x4epibase {
 							$values .= '<h2>URL</h2>'.
 										'<p class="bodytext">'.
 										$this->cObj->getTypoLink($this->pi_getLL('link1'),$this->internal['currentRow'][$key]).
-										'</p>';
+										'</p>'; 
 						}
 				break;
 

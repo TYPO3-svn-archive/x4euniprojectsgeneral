@@ -113,6 +113,7 @@ class tx_x4euniprojectsgeneral_import extends tx_scheduler_Task {
 		$xmlArr = array();
 		// Get xmlstr over oai
 		$xmlstr = $this->file_post_contents($this->url,false,$this->oaiuser,$this->oaipw);
+		//mail('alessandro@4eyes.ch','XML-Test',$xmlstr);
 		$xmlArr[0] = new SimpleXMLElement($xmlstr);
 
 		// Used to limit the oai calls
@@ -217,15 +218,15 @@ class tx_x4euniprojectsgeneral_import extends tx_scheduler_Task {
 			//$contact = '';
 			
 			$mArr['pid'] = $this->mapping['pid_proj'];
-			$mArr['tstamp'] = ($record['lastupdate']) ?  strtotime($record['lastupdate']): '';
-			$mArr['crdate'] = ($record['creationdate']) ?  strtotime($record['creationdate']): '';
-			$mArr['projecttitle'] = ($record['title']) ?  $record['title']: '';
+			$mArr['tstamp'] = ($record['lastupdate']) ? strtotime($record['lastupdate']): '';
+			$mArr['crdate'] = ($record['creationdate']) ? strtotime($record['creationdate']): '';
+			$mArr['projecttitle'] = ($record['title']) ? $record['title']: '';
 			$mArr['projectmanagement'] = $principalInvestigator;
 			//$mArr['externalprojectmanagement'] = '';
 			$mArr['personsinvolved'] = $personsinvolved;
 			//$mArr['externalpersonsinvolved'] = '';
-			$mArr['start'] = ($record['startdate']) ?  $record['startdate']: '';
-			$mArr['end'] = ($record['enddate']) ?  $record['enddate']: '';
+			$mArr['start'] = $this->convertDate($record['startdate']);
+			$mArr['end'] = $this->convertDate($record['enddate']);
 			$mArr['financing'] = ($record['financedby']) ?  $record['financedby']: '';
 			//$mArr['collaboration'] = '';
 			//$mArr['volume'] = '';
@@ -235,7 +236,7 @@ class tx_x4euniprojectsgeneral_import extends tx_scheduler_Task {
 			//$mArr['comment'] = '';
 			//$mArr['methodology'] = '';
 			//$mArr['picture'] = '';
-			//$mArr['finished'] = '';
+			$mArr['finished'] = $this->convertStatus($record['status']);
 			$mArr['category'] = '';
 			//$mArr['category'] = ($this->mapping['cat_matching'][$record['pubtype_weboffice']])?$this->mapping['cat_matching'][$record['pubtype_weboffice']]:0;
 			//if($mArr['category'] == 0) $mArr['category'] = ($this->mapping['cat_matching'][$record['otid']])?$this->mapping['cat_matching'][$record['otid']]:0;
@@ -264,12 +265,46 @@ class tx_x4euniprojectsgeneral_import extends tx_scheduler_Task {
 			$procFdbIds[] = $mArr['fdb_id'];
 		}
 		//delete publications
-		$count['deleted'] = $this->deleteOldPublications($procFdbIds);
+		$count['deleted'] = 0;//$this->deleteOldPublications($procFdbIds);
 		return $count;
 		
 	}
 	
+	/**
+	 * converts the date string (yyyy-mm-dd) in a unix-timestamp
+	 * @param string date : date-string
+	 * @return int timestamp : UNIX-timestamp 
+	 */
+	function convertDate($date){
+		if(!empty($date)){
+			$parts = t3lib_div::trimExplode('-',$date);
+			if(count($parts)==3){
+				//creates a timestamp from the following timeformat string: yyyy-mm-dd
+				return mktime(0,0,0,intval($parts[1]),intval($parts[2]),intval($parts[0]));
+			}else{
+				return '';
+			}
+		}else{
+			return '';
+		}
+	}
 	
+	/**
+	 * Converts the status information to a finished flag
+	 * @param string status : status information
+	 * @return int finished : finished flag
+	 */
+	function convertStatus($status){
+		switch($status){
+			case 'Completed':
+			case 'Archived':
+				return 1;
+			break;
+			default:
+				return 0;
+			break;
+		}
+	}
 	
 	/**
 	 * matches fdb users to local users. 

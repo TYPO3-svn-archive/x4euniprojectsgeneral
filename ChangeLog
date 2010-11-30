@@ -1,13 +1,5 @@
-2010-11-26 Alessandro Bellafronte <alessandro-at-4eyes.ch>
-	* Added a pagebrowser in standard listView-template
-	* Fixed a sorting bug in listView (sorting by person)
-	* Flexform was modificated (modes "pm_running" and "pm_finished" were added)
-	* Modificated the TS ext_typoscript.txt
-	* Modificated the default html template for listview and defaultview
-
 2010-10-26 Markus Stauffiger <markus-at-4eyes.ch>
 	* housekeeping
-	* compatibility issues
 
 2010-09-14 Michel Georgy <michel-at-4eyes.ch>
 	* fixed missing require

@@ -15,55 +15,55 @@ class tx_x4euniprojectsgeneral_Import_AdditionalFieldProvider implements tx_sche
 			}
 		}
 		
-		if (empty($taskInfo['oaiuser'])) {
+		if (empty($taskInfo['projoaiuser'])) {
 			if ($parentObject->CMD == 'add') {
 				// In case of new task and if field is empty, set default sleep time
-				$taskInfo['oaiuser'] = '';
+				$taskInfo['projoaiuser'] = '';
 			} elseif ($parentObject->CMD == 'edit') {
 				// In case of edit, set to internal value if no data was submitted already
-				$taskInfo['oaiuser'] = $task->oaiuser;
+				$taskInfo['projoaiuser'] = $task->oaiuser;
 			} else {
 				// Otherwise set an empty value, as it will not be used anyway
-				$taskInfo['oaiuser'] = '';
+				$taskInfo['projoaiuser'] = '';
 			}
 		}
 		
-		if (empty($taskInfo['oaipw'])) {
+		if (empty($taskInfo['projoaipw'])) {
 			if ($parentObject->CMD == 'add') {
 				// In case of new task and if field is empty, set default sleep time
-				$taskInfo['oaipw'] = '';
+				$taskInfo['projoaipw'] = '';
 			} elseif ($parentObject->CMD == 'edit') {
 				// In case of edit, set to internal value if no data was submitted already
-				$taskInfo['oaipw'] = $task->oaipw;
+				$taskInfo['projoaipw'] = $task->oaipw;
 			} else {
 				// Otherwise set an empty value, as it will not be used anyway
-				$taskInfo['oaipw'] = '';
+				$taskInfo['projoaipw'] = '';
 			}
 		}
 		
-		if (empty($taskInfo['oaiurl'])) {
+		if (empty($taskInfo['projoaiurl'])) {
 			if ($parentObject->CMD == 'add') {
 				// In case of new task and if field is empty, set default sleep time
-				$taskInfo['oaiurl'] = '';
+				$taskInfo['projoaiurl'] = '';
 			} elseif ($parentObject->CMD == 'edit') {
 				// In case of edit, set to internal value if no data was submitted already
-				$taskInfo['oaiurl'] = $task->oaiurl;
+				$taskInfo['projoaiurl'] = $task->oaiurl;
 			} else {
 				// Otherwise set an empty value, as it will not be used anyway
-				$taskInfo['oaiurl'] = '';
+				$taskInfo['projoaiurl'] = '';
 			}
 		}
 		
-		if (empty($taskInfo['getall'])) {
+		if (empty($taskInfo['projgetall'])) {
 			if ($parentObject->CMD == 'add') {
 				// In case of new task and if field is empty, set default sleep time
-				$taskInfo['getall'] = '0';
+				$taskInfo['projgetall'] = '0';
 			} elseif ($parentObject->CMD == 'edit') {
 				// In case of edit, set to internal value if no data was submitted already
-				$taskInfo['getall'] = $task->getall;
+				$taskInfo['projgetall'] = $task->getall;
 			} else {
 				// Otherwise set an empty value, as it will not be used anyway
-				$taskInfo['getall'] = '0';
+				$taskInfo['projgetall'] = '0';
 			}
 		}
 
@@ -71,17 +71,17 @@ class tx_x4euniprojectsgeneral_Import_AdditionalFieldProvider implements tx_sche
 		$pubIdFieldID = 'task_projpid';
 		$pubIdFieldCode = '<input type="text" name="tx_scheduler[projpid]" id="' . $pubIdFieldID . '" value="' . $taskInfo['projpid'] . '" size="10" />';
 		
-		$oaiUserFieldID = 'task_oaiuser';
-		$oaiUserFieldCode = '<input type="text" name="tx_scheduler[oaiuser]" id="' . $oaiUserFieldID . '" value="' . $taskInfo['oaiuser'] . '" size="30" />';
+		$oaiUserFieldID = 'task_projoaiuser';
+		$oaiUserFieldCode = '<input type="text" name="tx_scheduler[projoaiuser]" id="' . $oaiUserFieldID . '" value="' . $taskInfo['projoaiuser'] . '" size="30" />';
 		
-		$oaiPwFieldID = 'task_oaipw';
-		$oaiPwFieldCode = '<input type="password" name="tx_scheduler[oaipw]" id="' . $oaiPwFieldID . '" value="' . $taskInfo['oaipw'] . '" size="30" />';
+		$oaiPwFieldID = 'task_projoaipw';
+		$oaiPwFieldCode = '<input type="password" name="tx_scheduler[projoaipw]" id="' . $oaiPwFieldID . '" value="' . $taskInfo['projoaipw'] . '" size="30" />';
 		
-		$oaiUrlFieldID = 'task_oaiurl';
-		$oaiUrlFieldCode = '<input type="text" name="tx_scheduler[oaiurl]" id="' . $oaiUrlFieldID . '" value="' . $taskInfo['oaiurl'] . '" size="50" />';
+		$oaiUrlFieldID = 'task_projoaiurl';
+		$oaiUrlFieldCode = '<input type="text" name="tx_scheduler[projoaiurl]" id="' . $oaiUrlFieldID . '" value="' . $taskInfo['projoaiurl'] . '" size="50" />';
 		
-		$getAllFieldID = 'task_getall';
-		$getAllFieldCode = '<input type="text" name="tx_scheduler[getall]" id="' . $oaiUrlFieldID . '" value="' . $taskInfo['getall'] . '" size="2" />';
+		$getAllFieldID = 'task_projgetall';
+		$getAllFieldCode = '<input type="text" name="tx_scheduler[projgetall]" id="' . $oaiUrlFieldID . '" value="' . $taskInfo['projgetall'] . '" size="2" />';
 		
 		
 		$additionalFields = array();
@@ -120,21 +120,21 @@ class tx_x4euniprojectsgeneral_Import_AdditionalFieldProvider implements tx_sche
 
 	public function validateAdditionalFields(array &$submittedData, tx_scheduler_Module $parentObject) {
 		$submittedData['projpid'] = trim($submittedData['projpid']);
-		$submittedData['oaiuser'] = trim($submittedData['oaiuser']);
-		$submittedData['oaipw'] = trim($submittedData['oaipw']);
-		$submittedData['oaiurl'] = trim($submittedData['oaiurl']);
-		$submittedData['getall'] = trim($submittedData['getall']);
+		$submittedData['projoaiuser'] = trim($submittedData['projoaiuser']);
+		$submittedData['projoaipw'] = trim($submittedData['projoaipw']);
+		$submittedData['projoaiurl'] = trim($submittedData['projoaiurl']);
+		$submittedData['projgetall'] = trim($submittedData['projgetall']);
 
 		if (empty($submittedData['projpid'])) {
 			$parentObject->addMessage('No project pid given', t3lib_FlashMessage::ERROR);
 			$result = false;
-		} else if (empty($submittedData['oaiuser'])){
+		} else if (empty($submittedData['projoaiuser'])){
 			$parentObject->addMessage('No oai user given', t3lib_FlashMessage::ERROR);
 			$result = false;
-		} else if (empty($submittedData['oaipw'])){
+		} else if (empty($submittedData['projoaipw'])){
 			$parentObject->addMessage('No oai pw given', t3lib_FlashMessage::ERROR);
 			$result = false;
-		} else if (empty($submittedData['oaiurl'])){
+		} else if (empty($submittedData['projoaiurl'])){
 			$parentObject->addMessage('No oai url given', t3lib_FlashMessage::ERROR);
 			$result = false;
 		}
@@ -146,10 +146,10 @@ class tx_x4euniprojectsgeneral_Import_AdditionalFieldProvider implements tx_sche
 
     public function saveAdditionalFields(array $submittedData, tx_scheduler_Task $task) {
 		$task->projpid = $submittedData['projpid'];
-		$task->oaiuser = $submittedData['oaiuser'];
-		$task->oaipw = $submittedData['oaipw'];
-		$task->oaiurl = $submittedData['oaiurl'];
-		$task->getall = $submittedData['getall'];
+		$task->oaiuser = $submittedData['projoaiuser'];
+		$task->oaipw = $submittedData['projoaipw'];
+		$task->oaiurl = $submittedData['projoaiurl'];
+		$task->getall = $submittedData['projgetall'];
     }
 }
 ?>
